@@ -46,21 +46,50 @@ class Scraping extends Command
         //$targetUrl = 'https://www.mgstage.com/?form=prestige_18kin&utm_medium=official&utm_source=prestige&utm_campaign=prestige_18kin&agef=1';
         //$targetUrl = 'https://www.prestige-av.com/';
 
-        $cookies = ['uuid', '38dbd6482dfd41c1002f71bd9f3862af'];
+        //$cookies = ['uuid', '38dbd6482dfd41c1002f71bd9f3862af'];
 
         $client = new \Goutte\Client();
 
-        $client->getCookieJar()->updateFromSetCookie($cookies);
+        //$client->getCookieJar()->updateFromSetCookie($cookies);
 
-        $targetUrl = 'https://www.mgstage.com/?form=prestige_18kin&utm_medium=official&utm_source=prestige&utm_campaign=prestige_18kin&agef=1';
+        $targetUrl = 'https://www.dmm.co.jp/digital/videoa/-/list/=/article=keyword/id=2001/sort=ranking/';
 
         $crawler = $client->request('GET', $targetUrl);
 
-
-        $link = $crawler->selectLink('女優一覧へ')->link();
+        $link = $crawler->selectLink('はい')->link();
 
         $clicked = $client->click($link);
 
+        $clicked->filter('ul#list')->each(function ($ul) {
+            
+            $ul->filter('li')->each(function ($li) {
+                $li->filter('p.sublink')->each(function ($p) {
+                    if ($p->text() !== '----') {
+                        $sexy_actress = SexyActress::where('name', '=', $p->text())->first();
+                        if ($sexy_actress !== null) {
+                            $sexy_actress->category_id = 5;
+                        
+                
+                        DB::beginTransaction();
+                        try {
+                            $sexy_actress->save();
+                            DB::commit();
+                            Log::notice('スクレイピングバッチの実行が成功しました。');
+
+                        } catch (\Exception $exception) {
+                            Log::error('AV女優の更新に失敗しました', [
+                            'exception' => $exception->getMessage(),
+                            'file' => __FILE__,
+                            'method' => __FUNCTION__,
+                            'line' => __LINE__
+                            ]);
+                            DB::rollBack();
+                        };
+                    }
+                    }
+                });
+            });
+        /*
         $clicked->filter('div.push_actress')->each(function ($div) {
             
             $div->filter('li')->each(function ($li) {
@@ -88,7 +117,9 @@ class Scraping extends Command
             });
 
         });
+        */
 
-    }       
- }
+        });       
+    }
+}
 
