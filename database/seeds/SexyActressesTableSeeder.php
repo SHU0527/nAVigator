@@ -1,12 +1,14 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+namespace Database\Seeders;
 
-class DatabaseSeeder extends Seeder
+use Illuminate\Database\Seeder;
+
+class SexyActressesTableSeeder extends Seeder
 {
+
     /**
-     * Run the database seeds.
+     * Auto generated seed file
      *
      * @return void
      */

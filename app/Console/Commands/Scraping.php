@@ -51,9 +51,9 @@ class Scraping extends Command
         $client = new \Goutte\Client();
 
         if ($i === 1) {
-            $targetUrl = "https://www.dmm.co.jp/digital/videoa/-/list/narrow/=/article=keyword/id=1039/n1=DgRJTglEBQ4G2P6FxA__/sort=ranking/";
+            $targetUrl = "https://www.dmm.co.jp/digital/videoa/-/list/=/article=keyword/id=1034/sort=ranking/";
         } else {
-            $targetUrl = "https://www.dmm.co.jp/digital/videoa/-/list/narrow/=/article=keyword/id=1039/n1=DgRJTglEBQ4G2P6FxA__/sort=ranking/page=${i}/"; 
+            $targetUrl = "https://www.dmm.co.jp/digital/videoa/-/list/=/article=keyword/id=1034/sort=ranking/page=${i}/"; 
         }
 
         $crawler = $client->request('GET', $targetUrl);
@@ -72,8 +72,8 @@ class Scraping extends Command
                         $sexy_actress = SexyActress::where('name', '=', $p->text())->first();
                         if ($sexy_actress !== null) {
                             if (empty($sexy_actress->category_id)) {
-                                $sexy_actress->category_id = 2;
-                                Log::notice('カテゴリーIDを2に変更します');
+                                $sexy_actress->category_id = 1;
+                                Log::notice('カテゴリーIDを1に変更します');
                             }
                 
                         DB::beginTransaction();
