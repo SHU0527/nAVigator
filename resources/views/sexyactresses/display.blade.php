@@ -34,7 +34,7 @@
 @foreach ($find_results as $find_result)
 <tr>
 <td><a href="{{ route('detail', ['id' => $find_result['id']]) }}">{{ $find_result['name'] }}</a></td>
-<td><a href="{{ route('detail', ['id' => $find_result['id']]) }}"><img src="{{ asset('/storage/img/' . $find_result['image_name'])  }}" width="200" height="300"></a></td>
+<td><a href="{{ route('detail', ['id' => $find_result['id']]) }}"><img src="{{ asset('/storage/app/img/' . $find_result['image_name'])  }}" width="200" height="300"></a></td>
 </tr>
 @endforeach
 </table>
